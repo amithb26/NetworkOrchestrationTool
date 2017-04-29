@@ -1,13 +1,15 @@
 import pexpect
+from robot.output import librarylogger
+from robot.running.context import EXECUTION_CONTEXTS
+
 import time
 import basicConfiguration
+import logging
 from loggerSetup import logToFile
 from Buffer import flushBuffer
 from GetData import getData
 from Execute import executeCmd
 from PutData import putData
-
-
 from buildNetworkTopology import buildNetwork
 
 
@@ -30,8 +32,10 @@ class Setup:
 		self.Network = self.data["Network"]
 
 		
+
 	def buildNetworkTopology(self):				#Builds Network Topology i:e instantiate devices(docker containers),addlinks and set interfaces UP 
 
+		print "In build network"
 		TopologyType = self.data['TopologyType']
 		logToFile.info('Building Network Topology')		
 		TopologyDetails = buildNetwork(TopologyType)
@@ -112,6 +116,7 @@ class Setup:
 			logToFile.info('Configuring ip address on Device %s',Router)
 			RouterInst = basicConfiguration.switchToRouter(self.device,Router)
  			RouterInst = basicConfiguration.preliminaryInstalls(RouterInst)
+			#RouterInst = basicConfiguration.boot(RouterInst)
 			interfaces = Devices[Router].keys()
 			interfaces.sort()
 			for intf in interfaces:
@@ -159,15 +164,15 @@ class Setup:
 		
 
 
-#obj = Setup()
-#topodet = obj.buildNetworkTopology()
-#obj.bootUpDevices()
-#network_list = topodet["Nwlist"]
-#intfList = topodet["Interfaceslist"]
-#IPaddressList = obj.getIPaddressList(network_list,intfList)	
-#obj.setTopologyFile(intfList,IPaddressList)
-#obj.configureIPaddress()
-#obj.pingTest()		
+obj = Setup()
+topodet = obj.buildNetworkTopology()
+obj.bootUpDevices()
+network_list = topodet["Nwlist"]
+intfList = topodet["Interfaceslist"]
+IPaddressList = obj.getIPaddressList(network_list,intfList)	
+obj.setTopologyFile(intfList,IPaddressList)
+obj.configureIPaddress()
+obj.pingTest()		
 
 	                                
 	

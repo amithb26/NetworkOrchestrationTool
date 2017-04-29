@@ -7,6 +7,10 @@ from Buffer import flushBuffer
 from GetData import getData
 from Execute import executeCmd
 from PutData import putData
+import logging
+from robot.output import librarylogger
+from robot.running.context import EXECUTION_CONTEXTS
+
 
 
 #This class defines the methods that provide logic for implementing the BGP configuration

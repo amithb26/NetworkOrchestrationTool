@@ -8,6 +8,10 @@ from Buffer import flushBuffer
 from GetData import getData
 from Execute import executeCmd
 from PutData import putData
+import logging
+from robot.output import librarylogger
+from robot.running.context import EXECUTION_CONTEXTS
+
 
 
 def getRouterIDList(): 	
@@ -83,7 +87,7 @@ def switchToRouter(device,Router):							#Logins to specific Router
 	cmd = """sudo docker exec -it %s bash""" %(Router)
 	device.sendline(cmd)
 	device.expect(['/w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=3)
-	logger.info(device.before)
+	logger.info(device.before,also_console=True)
 	output = device.before
 	search = "Errorresponse from daemon: %s" %(Router)
 	if re.search(search,output):
@@ -100,7 +104,7 @@ def BGPglobal(RouterInst,AS_Num,RouterId):						#Performs Global BGP configurati
 	config = """curl -X PATCH "Content-Type: application/json" -d '{"ASNum":"%s","RouterId":"%s"}' http://localhost:8080/public/v1/config/BGPGlobal""" % (AS_Num, RouterId)
 	RouterInst = executeCmd(RouterInst,config)
 	RouterInst.expect(['/w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=3)
-	logger.info(RouterInst.before)
+	logger.info(RouterInst.before,also_console=True)
 	output = RouterInst.before	
 	outputCheck(RouterInst,var,output)
 	return RouterInst
@@ -114,7 +118,7 @@ def createBGPV4Neighbor(RouterInst,PeerAS,NeighborAddress,Interface,BfdEnable=Fa
 	config = """curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"PeerAS":"%s", "NeighborAddress":"%s","IntfRef":"%s", "IfIndex":0,"RouteReflectorClusterId":0, "MultiHopTTL":0,"ConnectRetryTime":60,"HoldTime":180,"KeepaliveTime":60,"AddPathsMaxTx":0}' 'http://localhost:8080/public/v1/config/BGPv4Neighbor'""" %(PeerAS,NeighborAddress,Interface)
 	RouterInst = executeCmd(RouterInst,config)
 	RouterInst.expect(['/w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=3)
-	logger.info(RouterInst.before)
+	logger.info(RouterInst.before,also_console=True)
 	output = RouterInst.before
 	outputCheck(RouterInst,var,output)
 	return RouterInst
@@ -129,7 +133,7 @@ def checkAllBGPNeighbors(RouterInst):
 	config = """curl -H "Accept: application/json" "http://localhost:8080/public/v1/state/BGPv4Neighbors" | python -m json.tool"""
 	RouterInst = executeCmd(RouterInst,config)
 	RouterInst.expect(['/w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=3)
-	logger.info(RouterInst.before)
+	logger.info(RouterInst.before,also_console=True)
 	output = RouterInst.before
 	outputCheck(RouterInst,var,output)
 	return RouterInst 
@@ -157,7 +161,7 @@ def checkBGPRoute(RouterInst):
 	config = """curl -i -H "Content-Type: application/json" "http://localhost:8080/public/v1/state/BGPv4Routes"""
 	RouterInst = executeCmd(RouterInst,config)
 	RouterInst.expect(['/w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=3)
-	logger.info(RouterInst.before)
+	logger.info(RouterInst.before,also_console=True)
 	output = RouterInst.before
 	outputCheck(RouterInst,var,output)
 	return RouterInst 

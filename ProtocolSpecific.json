@@ -1,0 +1,74 @@
+{
+    "BGP_Parameters": {
+        "Router1": {
+            "ASNum": "200", 
+            "PeerDetails": {
+                "Peer1": {
+                    "ASNum": "200", 
+                    "IP_Address": "10.0.1.2/24", 
+                    "Interface": "eth2"
+                }, 
+                "Peer2": {
+                    "ASNum": "200", 
+                    "IP_Address": "10.0.2.2/24", 
+                    "Interface": "eth4"
+                }, 
+                "Peer3": {
+                    "ASNum": "200", 
+                    "IP_Address": "10.0.3.2/24", 
+                    "Interface": "eth6"
+                }, 
+                "Peer4": {
+                    "ASNum": "200", 
+                    "IP_Address": "10.0.4.2/24", 
+                    "Interface": "eth8"
+                }
+            }, 
+            "RouterID": "1.1.1.1"
+        }, 
+        "Router2": {
+            "ASNum": "200", 
+            "PeerDetails": {
+                "Peer1": {
+                    "ASNum": "200", 
+                    "IP_Address": "10.0.1.1/24", 
+                    "Interface": "eth1"
+                }
+            }, 
+            "RouterID": "2.2.2.2"
+        }, 
+        "Router3": {
+            "ASNum": "200", 
+            "PeerDetails": {
+                "Peer1": {
+                    "ASNum": "200", 
+                    "IP_Address": "10.0.2.1/24", 
+                    "Interface": "eth3"
+                }
+            }, 
+            "RouterID": "3.3.3.3"
+        }, 
+        "Router4": {
+            "ASNum": "200", 
+            "PeerDetails": {
+                "Peer1": {
+                    "ASNum": "200", 
+                    "IP_Address": "10.0.3.1/24", 
+                    "Interface": "eth5"
+                }
+            }, 
+            "RouterID": "4.4.4.4"
+        }, 
+        "Router5": {
+            "ASNum": "200", 
+            "PeerDetails": {
+                "Peer1": {
+                    "ASNum": "200", 
+                    "IP_Address": "10.0.4.1/24", 
+                    "Interface": "eth7"
+                }
+            }, 
+            "RouterID": "5.5.5.5"
+        }
+    }
+}

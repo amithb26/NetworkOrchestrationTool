@@ -1,10 +1,14 @@
 import pexpect
 import time
 import re
+import logging
 from GetData import getData
 from Buffer import flushBuffer
 from loggerSetup import logToFile
 from robot.api import logger
+from robot.output import librarylogger
+from robot.running.context import EXECUTION_CONTEXTS
+
 
 def preSetup():
 	
@@ -19,7 +23,7 @@ def preSetup():
 	logToFile.info("	  Creating  directory for storing network namespace") 
 	device.sendline("mkdir -m 777 -p /var/run/netns")					#Create a directory
 	device.expect(['netns',pexpect.EOF,pexpect.TIMEOUT],timeout=2)
-	logger.info(device.before)
+	logger.info(device.before,also_console=True)
 	return device
 
 
@@ -33,13 +37,13 @@ def createNodes(iterator,device):                                 				#Instantia
 	cmd = """sudo docker run -dt --privileged --log-driver=syslog --cap-add=ALL  --name Router%d -P snapos/flex:flex2""" %(i+1)    													#Instantiates the container	
 	device.sendline(cmd)
 	device.expect(['/d+',pexpect.EOF,pexpect.TIMEOUT],timeout=2)
-	logger.info(device.before)
+	logger.info(device.before,also_console=True)
 	flushBuffer(1,device)
 	device.expect(['/w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=1)
 	cmd1 = """sudo docker inspect -f '{{.State.Pid}}' Router%d""" %(i+1)			#Gets PID for the container
 	device.sendline(cmd1)
 	device.expect(['/d+',pexpect.EOF,pexpect.TIMEOUT],timeout=8)
-	logger.info(device.before)
+	logger.info(device.before,also_console=True)
 	output = device.before
 	pid = re.search('(\d\d[\d$]+)\s',output)						#Searches for the PID value
 	return pid
@@ -56,7 +60,7 @@ def addLinks(device,intfList):									#Adds Links between devices
 		cmd = """sudo ip link add %s type veth peer name %s""" %(intfList[i],intfList[i+1])
 		device.sendline(cmd)
 		device.expect(['w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=8)
-		logger.info(device.before)
+		logger.info(device.before,also_console=True)
 		logToFile.info("		link Router1(%s)-----------------------------%s(Router%d)",intfList[i],intfList[i+1],j)
 		i = i + 2
 		j = j + 1
@@ -79,7 +83,7 @@ def setInterfaceUp(device,RouterPid,intfList):							#Brings the interfaces up
 			device.sendline(cmd)
 			device.expect(['w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=3)
 			logToFile.info('		Interface %s of Router1 UP',intfList[j])
-			logger.info(device.before)
+			logger.info(device.before,also_console=True)
 			j = j+1
 
 		else:
@@ -88,7 +92,7 @@ def setInterfaceUp(device,RouterPid,intfList):							#Brings the interfaces up
 			device.sendline(cmd)
 			device.expect(['w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=3)
 			logToFile.info('		Interface %s of Router%d UP',intfList[j],i+1) 
-			logger.info(device.before)
+			logger.info(device.before,also_console=True)
 			j = j+1
 			i = i+1	
 

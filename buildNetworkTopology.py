@@ -3,10 +3,14 @@ import time
 import json
 import re
 import Topology
+import logging
 from Buffer import flushBuffer
 from GetData import getData
 from loggerSetup import logToFile
 from robot.api import logger
+from robot.output import librarylogger
+from robot.running.context import EXECUTION_CONTEXTS
+
 
 #The method takes argument that specifies type of topology to be built and then includes calls to several methods that aids in implementing operation of building the network
 #	In it's preSetup(), it Pulls the latest flexswitch image from docker hub, creates directory for storing docker details, add symbolic links
@@ -36,7 +40,7 @@ def buildNetwork(TopologyType):
 				cmd = """ln -s /proc/%s/ns/net /var/run/netns/%s""" %(RouterPid[i],RouterPid[i])
 				device.sendline(cmd)
 				device.expect(['/d+',pexpect.EOF,pexpect.TIMEOUT],timeout=3)
-				logger.info(device.before)
+				logger.info(device.before,also_console=True)
 				break
 			else:
 

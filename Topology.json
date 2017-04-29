@@ -1,0 +1,40 @@
+{
+    "Device_details": {
+        "Router1": {
+            "eth1": "10.0.1.1/24", 
+            "eth3": "10.0.2.1/24", 
+            "eth5": "10.0.3.1/24", 
+            "eth7": "10.0.4.1/24"
+        }, 
+        "Router2": {
+            "eth2": "10.0.1.2/24"
+        }, 
+        "Router3": {
+            "eth4": "10.0.2.2/24"
+        }, 
+        "Router4": {
+            "eth6": "10.0.3.2/24"
+        }, 
+        "Router5": {
+            "eth8": "10.0.4.2/24"
+        }
+    }, 
+    "Link_details": {
+        "Link_Router1_Router2": {
+            "Router1": "eth1", 
+            "Router2": "eth2"
+        }, 
+        "Link_Router1_Router3": {
+            "Router1": "eth3", 
+            "Router3": "eth4"
+        }, 
+        "Link_Router1_Router4": {
+            "Router1": "eth5", 
+            "Router4": "eth6"
+        }, 
+        "Link_Router1_Router5": {
+            "Router1": "eth7", 
+            "Router5": "eth8"
+        }
+    }
+}
