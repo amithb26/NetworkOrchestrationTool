@@ -18,13 +18,13 @@ from robot.running.context import EXECUTION_CONTEXTS
 #	In it's addLink(), it adds link between devices(Uses Linux commands) 
 #	In it's setInterfacesUP(), it brings up all the created interfaces (Uses Linux commands)
 
-def buildNetwork(TopologyType):
+def buildNetwork(TopologyType,image):
 
 	RouterPid = []
 	data = getData('variable.json')
 	NumberOfDevices = data["NumberOfDevices"]
 	logToFile.info("	  Setting up the pre-requisite environment")
-	device = Topology.preSetup()
+	device = Topology.preSetup(image)
 	logToFile.info("	  Setting up the nodes of the network")
 
 	for i in range(0,NumberOfDevices):						

@@ -33,12 +33,13 @@ class Setup:
 
 		
 
-	def buildNetworkTopology(self):				#Builds Network Topology i:e instantiate devices(docker containers),addlinks and set interfaces UP 
+	def buildNetworkTopology(self):				#Builds Network Topology i:e instantiate devices(docker containers),load containers with latest flexswitch image,addlinks and set interfaces UP 
 
 		print "In build network"
 		TopologyType = self.data['TopologyType']
+		image = self.data["flexswitchImage"]
 		logToFile.info('Building Network Topology')		
-		TopologyDetails = buildNetwork(TopologyType)
+		TopologyDetails = buildNetwork(TopologyType,image)
 		logToFile.info('	Network Topology of type %s is built with %d devices having %s as interfaces of devices and populated with %s networks' ,TopologyType,self.NumberOfDevices,TopologyDetails["Interfaceslist"],TopologyDetails["Nwlist"])
 		return TopologyDetails
 

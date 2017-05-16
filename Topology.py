@@ -10,14 +10,15 @@ from robot.output import librarylogger
 from robot.running.context import EXECUTION_CONTEXTS
 
 
-def preSetup():
+def preSetup(image):
 	
 	data = getData('variable.json')								#Get the json data from file "variable.json"
 	NumberOfDevices = data["NumberOfDevices"]
 	device = pexpect.spawn("/bin/bash")							#Spawn the process ("/bin/bash")- Terminal
 	logToFile.info("	  Pulling the flexswitch base image")
 	device.expect(['/$',pexpect.EOF,pexpect.TIMEOUT],timeout=1)
-	device.sendline('sudo docker pull snapos/flex:flex2')					#Pull the flexswitch image from docker hub
+	cmd = "sudo docker pull %s" %(image)
+	device.sendline(cmd)									#Pull the flexswitch image from docker hub
 	device.expect(['/w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=2)
 	device.expect(['/$',pexpect.EOF,pexpect.TIMEOUT],timeout=2)
 	logToFile.info("	  Creating  directory for storing network namespace") 
@@ -69,7 +70,7 @@ def addLinks(device,intfList):									#Adds Links between devices
 
 def setInterfaceUp(device,RouterPid,intfList):							#Brings the interfaces up
 
-	flushBuffer(1,device)
+	#flushBuffer(1,device)
 
 	j = 0
 	i = 1
@@ -77,7 +78,8 @@ def setInterfaceUp(device,RouterPid,intfList):							#Brings the interfaces up
 	while j != maxiter:
 	
 		if j % 2 == 0:
-				
+			
+			flushBuffer(1,device)	
 			cmd = """sudo ip link set %s netns %s
 			sudo ip netns exec %s ip link set %s up""" %(intfList[j],RouterPid[0],RouterPid[0],intfList[j])
 			device.sendline(cmd)
@@ -87,6 +89,7 @@ def setInterfaceUp(device,RouterPid,intfList):							#Brings the interfaces up
 			j = j+1
 
 		else:
+			flushBuffer(1,device)
 			cmd = """sudo ip link set %s netns %s
 			sudo ip netns exec %s ip link set %s up""" %(intfList[j],RouterPid[i],RouterPid[i],intfList[j])
 			device.sendline(cmd)

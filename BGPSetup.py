@@ -142,12 +142,12 @@ class BGPSetup:
 		
 
 
-#obj = BGPSetup()
-#obj = BGPSetup()
-#obj.setBGPParameters()
-#obj.setPeersDetails()
-#obj.createBGPNeighbor('all')	
-#obj.checkBGPNeighbors('all')
+obj = BGPSetup()
+obj = BGPSetup()
+obj.setBGPParameters()
+obj.setPeersDetails()
+obj.createBGPNeighbor('all')	
+obj.checkBGPNeighbors('all')
 		
 
 			

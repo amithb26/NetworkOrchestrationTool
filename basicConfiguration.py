@@ -20,12 +20,13 @@ def boot(device):								#Boots network devices, Start the flexswitch services
 		
 	for i in range(0,NumberOfDevices):
 		Router = "Router"+str(i+1) 
-		RouterInst = switchToRouter(device,Router)
-		RouterInst.expect(['/w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=1)	
-		RouterInst.sendline('service flexswitch start')
-		time.sleep(10)
-		RouterInst.expect(['/w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=1)
-		logger.info(RouterInst.before,also_console=True)
+		#RouterInst = switchToRouter(device,Router)
+		device.expect(['/w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=1)
+		cmd = "sudo docker exec %s sh -c \"\/etc\/init\.d\/flexswitch restart\"" %(Router)	
+		device.sendline(cmd)
+		time.sleep(8)
+		device.expect(['/w+@.*/#',pexpect.EOF,pexpect.TIMEOUT],timeout=1)
+		logger.info(device.before,also_console=True)
 	return
 
 	
